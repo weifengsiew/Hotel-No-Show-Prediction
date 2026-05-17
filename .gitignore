@@ -1,4 +1,6 @@
 .DS_Store
+.venv/
+noshowenv/
 __pycache__/
 *.py[cod]
 .Rhistory
