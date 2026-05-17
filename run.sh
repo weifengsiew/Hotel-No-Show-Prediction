@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# Run script with bash.
 
-set -e
+set -e # Stop script if any command fails.
 
-PYTHONPATH=. python scripts/run_etl.py
+PYTHON="$(which python)" # Python executable from active environment.
+
+PYTHONPATH=. "$PYTHON" scripts/run_etl.py # Run ETL script with project root available for imports.

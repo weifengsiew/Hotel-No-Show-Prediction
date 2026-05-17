@@ -1,31 +1,6 @@
 {
-  "success": true,
+  "success": false,
   "results": [
-    {
-      "success": true,
-      "expectation_config": {
-        "type": "expect_column_values_to_not_be_null",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "booking_id"
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "element_count": 119390,
-        "unexpected_count": 0,
-        "unexpected_percent": 0.0,
-        "partial_unexpected_list": [],
-        "partial_unexpected_counts": []
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
     {
       "success": true,
       "expectation_config": {
@@ -58,12 +33,36 @@
     {
       "success": true,
       "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "booking_id"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
           "column": "booking_id",
           "type_list": [
-            "IntegerType",
             "LongType"
           ]
         },
@@ -168,7 +167,7 @@
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "branch"
+          "column": "platform"
         },
         "meta": {},
         "severity": "critical"
@@ -193,7 +192,7 @@
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "branch",
+          "column": "platform",
           "type_list": [
             "StringType"
           ]
@@ -217,10 +216,12 @@
         "type": "expect_column_values_to_be_in_set",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "branch",
+          "column": "platform",
           "value_set": [
-            "Changi",
-            "Orchard"
+            "Agent",
+            "Email",
+            "Phone",
+            "Website"
           ]
         },
         "meta": {},
@@ -434,6 +435,98 @@
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_month"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_type_list",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_month",
+          "type_list": [
+            "StringType"
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "observed_value": "StringType"
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_month",
+          "value_set": [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
           "column": "arrival_day"
         },
         "meta": {},
@@ -542,19 +635,29 @@
     {
       "success": true,
       "expectation_config": {
-        "type": "expect_column_values_to_not_be_null",
+        "type": "expect_column_values_to_be_between",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "checkout_month"
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"January\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
-        "element_count": 119390,
+        "element_count": 5929,
         "unexpected_count": 0,
         "unexpected_percent": 0.0,
         "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
         "partial_unexpected_counts": []
       },
       "meta": {},
@@ -567,19 +670,30 @@
     {
       "success": true,
       "expectation_config": {
-        "type": "expect_column_values_to_be_in_type_list",
+        "type": "expect_column_values_to_be_between",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "checkout_month",
-          "type_list": [
-            "StringType"
-          ]
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"February\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 29.0
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
-        "observed_value": "StringType"
+        "element_count": 8068,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
       },
       "meta": {},
       "exception_info": {
@@ -591,30 +705,337 @@
     {
       "success": true,
       "expectation_config": {
-        "type": "expect_column_values_to_be_in_set",
+        "type": "expect_column_values_to_be_between",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "checkout_month",
-          "value_set": [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-          ]
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"March\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
-        "element_count": 119390,
+        "element_count": 9794,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"April\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 11089,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"May\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 11791,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"June\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 10939,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"July\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 12661,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"August\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 13877,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"September\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 10508,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"October\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 11160,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"November\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 6794,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "arrival_day",
+          "row_condition": {
+            "pass_through_filter": "arrival_month == \"December\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 6780,
         "unexpected_count": 0,
         "unexpected_percent": 0.0,
         "partial_unexpected_list": [],
@@ -726,6 +1147,426 @@
       },
       "result": {
         "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"January\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 6516,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"February\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 29.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7716,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"March\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 9509,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"April\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 11016,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"May\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 12044,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"June\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 10692,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"July\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 12760,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"August\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 13836,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"September\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 10416,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"October\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 11434,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"November\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 30.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7214,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "checkout_day",
+          "row_condition": {
+            "pass_through_filter": "checkout_month == \"December\"",
+            "type": "pass_through"
+          },
+          "condition_parser": "spark",
+          "max_value": 31.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 6237,
         "unexpected_count": 0,
         "unexpected_percent": 0.0,
         "partial_unexpected_list": [],
@@ -1077,7 +1918,7 @@
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "first_time"
+          "column": "num_children"
         },
         "meta": {},
         "severity": "critical"
@@ -1102,16 +1943,16 @@
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "first_time",
+          "column": "num_children",
           "type_list": [
-            "StringType"
+            "IntegerType"
           ]
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
-        "observed_value": "StringType"
+        "observed_value": "IntegerType"
       },
       "meta": {},
       "exception_info": {
@@ -1126,94 +1967,18 @@
         "type": "expect_column_values_to_be_in_set",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "first_time",
+          "column": "num_children",
           "value_set": [
-            "Yes",
-            "No"
-          ]
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "element_count": 119390,
-        "unexpected_count": 0,
-        "unexpected_percent": 0.0,
-        "partial_unexpected_list": [],
-        "missing_count": 0,
-        "missing_percent": 0.0,
-        "unexpected_percent_total": 0.0,
-        "unexpected_percent_nonmissing": 0.0,
-        "partial_unexpected_counts": []
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
-    {
-      "success": true,
-      "expectation_config": {
-        "type": "expect_column_values_to_not_be_null",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "platform"
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "element_count": 119390,
-        "unexpected_count": 0,
-        "unexpected_percent": 0.0,
-        "partial_unexpected_list": [],
-        "partial_unexpected_counts": []
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
-    {
-      "success": true,
-      "expectation_config": {
-        "type": "expect_column_values_to_be_in_type_list",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "platform",
-          "type_list": [
-            "StringType"
-          ]
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "observed_value": "StringType"
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
-    {
-      "success": true,
-      "expectation_config": {
-        "type": "expect_column_values_to_be_in_set",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "platform",
-          "value_set": [
-            "Agent",
-            "Email",
-            "Phone",
-            "Website"
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
           ]
         },
         "meta": {},
@@ -1303,8 +2068,7 @@
             6,
             7,
             8,
-            9,
-            10
+            9
           ]
         },
         "meta": {},
@@ -1334,7 +2098,7 @@
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "num_children"
+          "column": "first_time"
         },
         "meta": {},
         "severity": "critical"
@@ -1359,16 +2123,16 @@
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "num_children",
+          "column": "first_time",
           "type_list": [
-            "IntegerType"
+            "StringType"
           ]
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
-        "observed_value": "IntegerType"
+        "observed_value": "StringType"
       },
       "meta": {},
       "exception_info": {
@@ -1383,19 +2147,10 @@
         "type": "expect_column_values_to_be_in_set",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "num_children",
+          "column": "first_time",
           "value_set": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10
+            "Yes",
+            "No"
           ]
         },
         "meta": {},
@@ -1425,7 +2180,7 @@
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "is_valid_price"
+          "column": "branch"
         },
         "meta": {},
         "severity": "critical"
@@ -1450,16 +2205,16 @@
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "is_valid_price",
+          "column": "branch",
           "type_list": [
-            "BooleanType"
+            "StringType"
           ]
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
-        "observed_value": "BooleanType"
+        "observed_value": "StringType"
       },
       "meta": {},
       "exception_info": {
@@ -1474,10 +2229,10 @@
         "type": "expect_column_values_to_be_in_set",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "is_valid_price",
+          "column": "branch",
           "value_set": [
-            true,
-            false
+            "Changi",
+            "Orchard"
           ]
         },
         "meta": {},
@@ -1502,51 +2257,48 @@
       }
     },
     {
-      "success": true,
+      "success": false,
       "expectation_config": {
-        "type": "expect_column_values_to_be_between",
+        "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "price_amount",
-          "min_value": 0.0
+          "column": "room"
         },
         "meta": {},
         "severity": "critical"
       },
       "result": {
         "element_count": 119390,
-        "unexpected_count": 0,
-        "unexpected_percent": 0.0,
-        "partial_unexpected_list": [],
-        "missing_count": 24881,
-        "missing_percent": 20.840103861294914,
-        "unexpected_percent_total": 0.0,
-        "unexpected_percent_nonmissing": 0.0,
-        "partial_unexpected_counts": []
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
-    {
-      "success": true,
-      "expectation_config": {
-        "type": "expect_column_values_to_be_in_type_list",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "price_amount",
-          "type_list": [
-            "DoubleType"
-          ]
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "observed_value": "DoubleType"
+        "unexpected_count": 21612,
+        "unexpected_percent": 18.102018594522153,
+        "partial_unexpected_list": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "partial_unexpected_counts": [
+          {
+            "value": null,
+            "count": 20
+          }
+        ]
       },
       "meta": {},
       "exception_info": {
@@ -1615,6 +2367,57 @@
       }
     },
     {
+      "success": false,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 24881,
+        "unexpected_percent": 20.840103861294914,
+        "partial_unexpected_list": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "partial_unexpected_counts": [
+          {
+            "value": null,
+            "count": 20
+          }
+        ]
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
       "success": true,
       "expectation_config": {
         "type": "expect_column_values_to_be_in_type_list",
@@ -1660,6 +2463,57 @@
         "unexpected_percent_total": 0.0,
         "unexpected_percent_nonmissing": 0.0,
         "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_currency"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 24881,
+        "unexpected_percent": 20.840103861294914,
+        "partial_unexpected_list": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "partial_unexpected_counts": [
+          {
+            "value": null,
+            "count": 20
+          }
+        ]
       },
       "meta": {},
       "exception_info": {
@@ -1880,8 +2734,7 @@
             "YER",
             "ZAR",
             "ZMW",
-            "ZWL",
-            null
+            "ZWL"
           ]
         },
         "meta": {},
@@ -1904,15 +2757,202 @@
         "exception_traceback": null,
         "exception_message": null
       }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_amount"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 24881,
+        "unexpected_percent": 20.840103861294914,
+        "partial_unexpected_list": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "partial_unexpected_counts": [
+          {
+            "value": null,
+            "count": 20
+          }
+        ]
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_type_list",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_amount",
+          "type_list": [
+            "DoubleType"
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "observed_value": "DoubleType"
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_amount",
+          "min_value": 0.0
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 24881,
+        "missing_percent": 20.840103861294914,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "is_valid_price"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_type_list",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "is_valid_price",
+          "type_list": [
+            "BooleanType"
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "observed_value": "BooleanType"
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "is_valid_price",
+          "value_set": [
+            true,
+            false
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
     }
   ],
   "suite_name": "noshow_expectation_suite",
   "suite_parameters": {},
   "statistics": {
-    "evaluated_expectations": 50,
-    "successful_expectations": 50,
-    "unsuccessful_expectations": 0,
-    "success_percent": 100.0
+    "evaluated_expectations": 78,
+    "successful_expectations": 73,
+    "unsuccessful_expectations": 5,
+    "success_percent": 93.58974358974359
   },
   "meta": {
     "great_expectations_version": "1.17.2",
@@ -1920,7 +2960,7 @@
       "batch_data": "SparkDataFrame"
     },
     "batch_markers": {
-      "ge_load_time": "20260516T051339.671144Z"
+      "ge_load_time": "20260517T080400.342811Z"
     },
     "active_batch_definition": {
       "datasource_name": "noshow_spark_datasource",
