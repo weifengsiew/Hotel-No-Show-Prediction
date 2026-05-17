@@ -15,7 +15,7 @@ import pycountry
 
 def add_no_duplicate_rows_expectation(suite):
 
-    """Expectation: no duplicate rows"""
+    """Expect no duplicate rows"""
     # booking_id is the row identifier
     suite.add_expectation(gxe.ExpectColumnValuesToBeUnique(column="booking_id"))
 
@@ -25,9 +25,12 @@ def add_no_duplicate_rows_expectation(suite):
 
 def get_nullable_columns_expectation():
     
-    """Expectation: no columns are nullable"""
+    """Expect nullable price_currency and price_amount"""
 
-    nullable_columns = {} 
+    nullable_columns = {
+        "price_currency": True,
+        "price_amount": True,
+    }
 
     return nullable_columns
 
@@ -69,13 +72,14 @@ def get_per_column_expectations():
 
         # accommodation-related variables
         "branch": {"InTypeList": ["StringType"], "InSet": ["Changi", "Orchard"]},  # observed from exploration
-        "room": {"InTypeList": ["StringType"], "InSet": ["King", "Queen", "Single", "President Suite"]},  # observed from exploration
+        "room": {"InTypeList": ["StringType"], "InSet": ["King", "Queen", "Single", "President Suite", "Null"]},  # observed from exploration
 
         # price-related variables
-        "price": {"InTypeList": ["StringType"], "MatchRegex": r"^[A-Z]+\$\s\d+(\.\d{1,2})?$"},  # e.g. "SGD$ 100.01"
+        "price": {"InTypeList": ["StringType"], "MatchRegex": r"^([A-Z]+\$\s\d+(\.\d{1,2})?|Null)$"},  # e.g. "SGD$ 100.01" or "Null"
         "price_currency": {"InTypeList": ["StringType"], "InSet": currency_codes},  # official currency codes e.g. "SGD"
-        "price_amount": {"InTypeList": ["DoubleType"], "min_value": 0},  # should be non-negative
-        "is_valid_price": {"InTypeList": ["BooleanType"], "InSet": [True, False]},  # whether price conforms to "SGD$ 100.01"
+        "price_amount": {"InTypeList": ["DoubleType"], "BeBetween": {"min_value": 0, "max_value": 10000}},  # should be non-negative and within expected range
+        "price_matches_expected_pattern": {"InTypeList": ["BooleanType"], "InSet": [True, False]},  # whether price conforms to "SGD$ 100.01"
+        "price_is_missing": {"InTypeList": ["BooleanType"], "InSet": [True, False]},  # whether price was standardized as missing
     }
 
     return per_column_expectations
@@ -150,9 +154,12 @@ def add_column_expectations(suite, df):
         if "MatchRegex" in expectations:
             suite.add_expectation(gxe.ExpectColumnValuesToMatchRegex(column=column_name, regex=expectations["MatchRegex"]))
         
-        # add min_value expectation if specified
-        if "min_value" in expectations:
-            suite.add_expectation(gxe.ExpectColumnValuesToBeBetween(column=column_name, min_value=expectations["min_value"]))
+        # add between expectation if specified
+        if "BeBetween" in expectations:
+            min_value = expectations["BeBetween"]["min_value"]
+            max_value = expectations["BeBetween"]["max_value"]
+            suite.add_expectation(gxe.ExpectColumnValuesToBeBetween(column=column_name, min_value=min_value,max_value=max_value,)
+        )
 
     return suite
 

@@ -4,12 +4,10 @@ import logging
 from itertools import chain
 
 from pyspark.sql.functions import abs, coalesce, col, create_map, initcap, lit, regexp_extract, trim, upper, when
-from pyspark.sql.types import BooleanType, DoubleType, IntegerType, StringType
+from pyspark.sql.types import BooleanType, DoubleType, IntegerType, LongType, StringType
 
 
 logger = logging.getLogger(__name__)
-DEFAULT_MISSING_VALUES = ["", "Na", "N/a", "Null", "Nan"]
-
 
 # -----------------------------------------------------------------------------
 
@@ -23,85 +21,143 @@ def drop_duplicate_rows(df, row_id: str):
 
     return df_deduped
 
+# -----------------------------------------------------------------------------
+
+def standardize_string_format(
+    df,
+    except_columns: list[str],
+):
+    """Trim spaces and title case strings: e.g. '  john doe  ' -> 'John Doe'."""
+    string_columns = [
+        field.name for field in df.schema.fields
+        if isinstance(field.dataType, StringType) and field.name not in except_columns
+    ]
+
+    for column in string_columns:
+        df = df.withColumn(column, initcap(trim(col(column))))
+
+    logger.info("Standardized %s string columns: %s", len(string_columns), string_columns)
+    return df
+
 
 # -----------------------------------------------------------------------------
 
-def drop_rows_with_missing_values(df, column: str, possible_missing_values: list[str]):
-    """Drop rows with nulls or string-style missing values in one column."""
-    condition = col(column).isNull()
+def standardize_price_string_format(df):
+    """Trim spaces and uppercase price strings: e.g. '  usd$ 100.00  ' -> 'USD$ 100.00'."""
+    df = df.withColumn("price", upper(trim(col("price"))))
+    logger.info("Standardized price string format.")
+    return df
 
-    if isinstance(df.schema[column].dataType, StringType):
-        condition = condition | trim(col(column)).isin(possible_missing_values)
+# -----------------------------------------------------------------------------
 
-    df_cleaned = df.filter(~condition)
+def get_missing_value_rows_for_column(field, string_type_missing_values: list[str]):
+    """Identify rows where a column is null or contains string type missing values."""
+    if isinstance(field.dataType, StringType):
+        rows_missing_value_for_column = col(field.name).isNull() | col(field.name).isin(string_type_missing_values)
+    else:
+        rows_missing_value_for_column = col(field.name).isNull()
+
+    return rows_missing_value_for_column
+
+
+# -----------------------------------------------------------------------------
+
+def drop_missing_value_rows(
+    df,
+    except_columns: list[str],
+    string_type_missing_values: list[str],
+):
+    """Drop rows with missing values, except those in specified columns."""
+    missing_value_rows = lit(False)
+
+    for field in df.schema.fields:
+        if field.name in except_columns:
+            continue
+
+        rows_missing_value_for_column = get_missing_value_rows_for_column(
+            field=field,
+            string_type_missing_values=string_type_missing_values,
+        )
+        missing_value_rows = missing_value_rows | rows_missing_value_for_column
+
+    df_cleaned = df.filter(~missing_value_rows)
     removed_count = df.count() - df_cleaned.count()
 
     if removed_count > 0:
-        logger.info("Removed %s rows with missing values in column %s.", removed_count, column)
+        logger.info(
+            "Removed %s rows with missing values, excluding columns: %s.",
+            removed_count,
+            except_columns,
+        )
 
     return df_cleaned
 
 
 # -----------------------------------------------------------------------------
 
-def normalize_categorical_text_columns(
+def standardize_missing_values(
     df,
     columns: list[str],
-    possible_missing_values: list[str] | None = None,
+    string_type_missing_values: list[str],
 ):
-    """Normalize selected categorical text columns while preserving missing values as null."""
-    possible_missing_values = possible_missing_values or DEFAULT_MISSING_VALUES
+    """Replace missing values in specified columns with "Null"."""
+    for column in columns:
+        rows_missing_value_for_column = get_missing_value_rows_for_column(
+            field=df.schema[column],
+            string_type_missing_values=string_type_missing_values,
+        )
+        df = df.withColumn(column, when(rows_missing_value_for_column, lit("Null")).otherwise(col(column)))
 
-    for column_name in columns:
-        missing_condition = col(column_name).isNull() | trim(col(column_name)).isin(possible_missing_values)
-        df = df.withColumn(column_name, when(missing_condition, lit(None)).otherwise(initcap(trim(col(column_name)))))
-
-    logger.info("Normalized %s categorical text columns: %s", len(columns), columns)
+    logger.info("Standardized missing values with 'Null' for columns: %s.", columns)
     return df
 
 
 # -----------------------------------------------------------------------------
 
-def normalize_price_currency_code(
-    df,
-    price_column: str = "price",
-    possible_missing_values: list[str] | None = None,
-):
-    """Trim and uppercase non-missing price values while preserving missing values as null."""
-    possible_missing_values = possible_missing_values or DEFAULT_MISSING_VALUES
-    missing_condition = col(price_column).isNull() | trim(col(price_column)).isin(possible_missing_values)
-
-    df = df.withColumn(price_column, when(missing_condition, lit(None)).otherwise(upper(trim(col(price_column)))))
-    logger.info("Normalized non-missing %s values and preserved missing values as null.", price_column)
-
+def create_price_is_missing_column(df):
+    """Create a column that marks standardized missing price values."""
+    df = df.withColumn("price_is_missing", col("price") == lit("Null"))
+    logger.info("Created price_is_missing flag.")
     return df
 
 
 # -----------------------------------------------------------------------------
 
-def parse_price_column(
-    df,
-    price_column: str = "price",
-    currency_column: str = "price_currency",
-    amount_column: str = "price_amount",
-    is_valid_column: str = "is_valid_price",
-):
-    """Parse the price column into currency and numeric amount columns."""
-    price_pattern = r"^([A-Z]+)\$\s(\d+(?:\.\d{1,2})?)$"
-    price_text = trim(col(price_column))
+def get_expected_price_pattern():
+    """Return the expected price pattern."""
+    expected_price_pattern = r"^([A-Z]+)\$\s(\d+(?:\.\d{1,2})?)$"
+    return expected_price_pattern
 
-    df = df.withColumn(is_valid_column, when(col(price_column).isNull(), lit(False)).otherwise(price_text.rlike(price_pattern)))
-    df = df.withColumn(currency_column, when(col(is_valid_column), regexp_extract(price_text, price_pattern, 1)))
-    df = df.withColumn(amount_column, when(col(is_valid_column), regexp_extract(price_text, price_pattern, 2).cast(DoubleType())))
+# -----------------------------------------------------------------------------
 
-    logger.info("Parsed %s into %s and %s; added %s validity flag.", price_column, currency_column, amount_column, is_valid_column)
+def create_price_matches_expected_pattern_column(df):
+    """Create a column that marks whether price matches the expected pattern."""
+    expected_price_pattern = get_expected_price_pattern()
+    price_text = col("price")
+
+    df = df.withColumn("price_matches_expected_pattern", when(col("price").isNull(), lit(False)).otherwise(price_text.rlike(expected_price_pattern)))
+    logger.info("Created price_matches_expected_pattern flag for price pattern.")
+    return df
+
+
+# -----------------------------------------------------------------------------
+
+def create_price_currency_and_amount_columns(df):
+    """Create price currency and amount columns for valid price patterns."""
+    expected_price_pattern = get_expected_price_pattern()
+    price_text = col("price")
+
+    df = df.withColumn("price_currency", when(col("price_matches_expected_pattern"), regexp_extract(price_text, expected_price_pattern, 1)))
+    df = df.withColumn("price_amount", when(col("price_matches_expected_pattern"), regexp_extract(price_text, expected_price_pattern, 2).cast(DoubleType())))
+
+    logger.info("Created price_currency and price_amount from valid price values.")
     return df
 
 
 # -----------------------------------------------------------------------------
 
 def convert_negative_days_to_positive(df, day_column: str):
-    """Convert negative day values to positive values using absolute values."""
+    """Convert negative day numbers to positive numbers."""
     df = df.withColumn(day_column, abs(col(day_column)))
     logger.info("Cleaned negative values in column %s by taking absolute values.", day_column)
     return df
@@ -109,15 +165,15 @@ def convert_negative_days_to_positive(df, day_column: str):
 
 # -----------------------------------------------------------------------------
 
-def convert_num_adults_words_to_digits(df, num_adults_column: str):
-    """Convert word-number adult counts to digit strings."""
-    number_mapping = {
+def convert_num_adults_words_to_digits(df):
+    """Convert num_adults values written as words into digits."""
+    words_to_digits = {
         "Zero": "0", "One": "1", "Two": "2", "Three": "3", "Four": "4",
         "Five": "5", "Six": "6", "Seven": "7", "Eight": "8", "Nine": "9", "Ten": "10",
     }
 
-    mapping_expr = create_map([lit(x) for x in chain(*number_mapping.items())])
-    df = df.withColumn(num_adults_column, coalesce(mapping_expr[trim(col(num_adults_column))], col(num_adults_column)))
+    mapping_expr = create_map([lit(x) for x in chain(*words_to_digits.items())])
+    df = df.withColumn("num_adults", coalesce(mapping_expr[col("num_adults")], col("num_adults")))
 
     logger.info("Cleaned num_adults by mapping word numbers to digit strings.")
     return df
@@ -125,19 +181,20 @@ def convert_num_adults_words_to_digits(df, num_adults_column: str):
 
 # -----------------------------------------------------------------------------
 
-def cast_noshow_column_types(df):
-    """Cast no-show columns to their expected Spark data types."""
+def convert_column_types_to_expected(df):
+    """Convert each no-show column to the expected data type."""
     type_mapping = {
-        "booking_id": IntegerType(), "no_show": IntegerType(),
+        "booking_id": LongType(), "no_show": IntegerType(),
         "booking_month": StringType(), "arrival_month": StringType(), "checkout_month": StringType(),
         "arrival_day": IntegerType(), "checkout_day": IntegerType(),
         "country": StringType(), "num_children": IntegerType(), "num_adults": IntegerType(),
         "first_time": StringType(), "platform": StringType(), "branch": StringType(), "room": StringType(),
-        "price": StringType(), "price_currency": StringType(), "price_amount": DoubleType(), "is_valid_price": BooleanType(),
+        "price": StringType(), "price_currency": StringType(), "price_amount": DoubleType(),
+        "price_matches_expected_pattern": BooleanType(), "price_is_missing": BooleanType(),
     }
 
-    for column_name, target_type in type_mapping.items():
-        df = df.withColumn(column_name, col(column_name).cast(target_type))
+    for column, target_type in type_mapping.items():
+        df = df.withColumn(column, col(column).cast(target_type))
 
     logger.info("Cast no-show columns to expected Spark data types.")
     return df
@@ -147,28 +204,26 @@ def cast_noshow_column_types(df):
 
 def transform_noshow_data(
     df,
-    row_id: str = "booking_id",
-    possible_missing_values: list[str] | None = None,
 ):
-    """Run the full transformation sequence before validation."""
-    possible_missing_values = possible_missing_values or DEFAULT_MISSING_VALUES
-    df = drop_duplicate_rows(df, row_id=row_id)
+    """Clean and reshape the no-show data before validation."""
+    string_type_missing_values = ["", "Na", "N/a", "Null", "Nan", "NA", "N/A", "NULL", "NAN"]
 
-    columns_to_check = [field.name for field in df.schema.fields if field.name not in ["room", "price"]]
-    for column_name in columns_to_check:
-        df = drop_rows_with_missing_values(df, column=column_name, possible_missing_values=possible_missing_values)
+    df = drop_duplicate_rows(df=df, row_id="booking_id")
 
-    categorical_string_columns = [
-        "booking_month", "arrival_month", "checkout_month", "country", "first_time",
-        "platform", "branch", "room", "num_adults",
-    ]
+    df = standardize_string_format(df=df, except_columns=["price"])
+    df = standardize_price_string_format(df=df)
+    
+    df = drop_missing_value_rows(df=df, except_columns=["room", "price"], string_type_missing_values=string_type_missing_values)
+    df = standardize_missing_values(df=df, columns=["room", "price"], string_type_missing_values=string_type_missing_values)
+    df = create_price_is_missing_column(df=df)
 
-    df = normalize_categorical_text_columns(df, categorical_string_columns, possible_missing_values=possible_missing_values)
-    df = normalize_price_currency_code(df, price_column="price", possible_missing_values=possible_missing_values)
-    df = parse_price_column(df, "price")
-    df = convert_negative_days_to_positive(df, "arrival_day")
-    df = convert_negative_days_to_positive(df, "checkout_day")
-    df = convert_num_adults_words_to_digits(df, "num_adults")
-    df = cast_noshow_column_types(df)
+    df = convert_negative_days_to_positive(df=df, day_column="arrival_day")
+    df = convert_negative_days_to_positive(df=df, day_column="checkout_day")
+    df = convert_num_adults_words_to_digits(df=df)
+
+    df = create_price_matches_expected_pattern_column(df=df)
+    df = create_price_currency_and_amount_columns(df=df)
+    
+    df = convert_column_types_to_expected(df=df)
 
     return df

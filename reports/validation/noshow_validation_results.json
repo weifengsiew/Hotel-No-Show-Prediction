@@ -1,5 +1,5 @@
 {
-  "success": false,
+  "success": true,
   "results": [
     {
       "success": true,
@@ -56,7 +56,7 @@
       }
     },
     {
-      "success": false,
+      "success": true,
       "expectation_config": {
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
@@ -70,7 +70,7 @@
         "severity": "critical"
       },
       "result": {
-        "observed_value": "IntegerType"
+        "observed_value": "LongType"
       },
       "meta": {},
       "exception_info": {
@@ -2257,7 +2257,7 @@
       }
     },
     {
-      "success": false,
+      "success": true,
       "expectation_config": {
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
@@ -2269,36 +2269,10 @@
       },
       "result": {
         "element_count": 119390,
-        "unexpected_count": 21612,
-        "unexpected_percent": 18.102018594522153,
-        "partial_unexpected_list": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "partial_unexpected_counts": [
-          {
-            "value": null,
-            "count": 20
-          }
-        ]
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": []
       },
       "meta": {},
       "exception_info": {
@@ -2342,7 +2316,8 @@
             "King",
             "Queen",
             "Single",
-            "President Suite"
+            "President Suite",
+            "Null"
           ]
         },
         "meta": {},
@@ -2353,8 +2328,8 @@
         "unexpected_count": 0,
         "unexpected_percent": 0.0,
         "partial_unexpected_list": [],
-        "missing_count": 21612,
-        "missing_percent": 18.102018594522153,
+        "missing_count": 0,
+        "missing_percent": 0.0,
         "unexpected_percent_total": 0.0,
         "unexpected_percent_nonmissing": 0.0,
         "partial_unexpected_counts": []
@@ -2367,7 +2342,7 @@
       }
     },
     {
-      "success": false,
+      "success": true,
       "expectation_config": {
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
@@ -2379,36 +2354,10 @@
       },
       "result": {
         "element_count": 119390,
-        "unexpected_count": 24881,
-        "unexpected_percent": 20.840103861294914,
-        "partial_unexpected_list": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "partial_unexpected_counts": [
-          {
-            "value": null,
-            "count": 20
-          }
-        ]
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": []
       },
       "meta": {},
       "exception_info": {
@@ -2448,7 +2397,7 @@
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
           "column": "price",
-          "regex": "^[A-Z]+\\$\\s\\d+(\\.\\d{1,2})?$"
+          "regex": "^([A-Z]+\\$\\s\\d+(\\.\\d{1,2})?|Null)$"
         },
         "meta": {},
         "severity": "critical"
@@ -2458,62 +2407,11 @@
         "unexpected_count": 0,
         "unexpected_percent": 0.0,
         "partial_unexpected_list": [],
-        "missing_count": 24881,
-        "missing_percent": 20.840103861294914,
+        "missing_count": 0,
+        "missing_percent": 0.0,
         "unexpected_percent_total": 0.0,
         "unexpected_percent_nonmissing": 0.0,
         "partial_unexpected_counts": []
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
-    {
-      "success": false,
-      "expectation_config": {
-        "type": "expect_column_values_to_not_be_null",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "price_currency"
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "element_count": 119390,
-        "unexpected_count": 24881,
-        "unexpected_percent": 20.840103861294914,
-        "partial_unexpected_list": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "partial_unexpected_counts": [
-          {
-            "value": null,
-            "count": 20
-          }
-        ]
       },
       "meta": {},
       "exception_info": {
@@ -2759,57 +2657,6 @@
       }
     },
     {
-      "success": false,
-      "expectation_config": {
-        "type": "expect_column_values_to_not_be_null",
-        "kwargs": {
-          "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "price_amount"
-        },
-        "meta": {},
-        "severity": "critical"
-      },
-      "result": {
-        "element_count": 119390,
-        "unexpected_count": 24881,
-        "unexpected_percent": 20.840103861294914,
-        "partial_unexpected_list": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "partial_unexpected_counts": [
-          {
-            "value": null,
-            "count": 20
-          }
-        ]
-      },
-      "meta": {},
-      "exception_info": {
-        "raised_exception": false,
-        "exception_traceback": null,
-        "exception_message": null
-      }
-    },
-    {
       "success": true,
       "expectation_config": {
         "type": "expect_column_values_to_be_in_type_list",
@@ -2840,7 +2687,8 @@
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
           "column": "price_amount",
-          "min_value": 0.0
+          "min_value": 0.0,
+          "max_value": 10000.0
         },
         "meta": {},
         "severity": "critical"
@@ -2869,7 +2717,7 @@
         "type": "expect_column_values_to_not_be_null",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "is_valid_price"
+          "column": "price_matches_expected_pattern"
         },
         "meta": {},
         "severity": "critical"
@@ -2894,7 +2742,7 @@
         "type": "expect_column_values_to_be_in_type_list",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "is_valid_price",
+          "column": "price_matches_expected_pattern",
           "type_list": [
             "BooleanType"
           ]
@@ -2918,7 +2766,89 @@
         "type": "expect_column_values_to_be_in_set",
         "kwargs": {
           "batch_id": "noshow_spark_datasource-noshow_data_asset",
-          "column": "is_valid_price",
+          "column": "price_matches_expected_pattern",
+          "value_set": [
+            true,
+            false
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_is_missing"
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 119390,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_type_list",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_is_missing",
+          "type_list": [
+            "BooleanType"
+          ]
+        },
+        "meta": {},
+        "severity": "critical"
+      },
+      "result": {
+        "observed_value": "BooleanType"
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "noshow_spark_datasource-noshow_data_asset",
+          "column": "price_is_missing",
           "value_set": [
             true,
             false
@@ -2949,10 +2879,10 @@
   "suite_name": "noshow_expectation_suite",
   "suite_parameters": {},
   "statistics": {
-    "evaluated_expectations": 78,
-    "successful_expectations": 73,
-    "unsuccessful_expectations": 5,
-    "success_percent": 93.58974358974359
+    "evaluated_expectations": 79,
+    "successful_expectations": 79,
+    "unsuccessful_expectations": 0,
+    "success_percent": 100.0
   },
   "meta": {
     "great_expectations_version": "1.17.2",
@@ -2960,7 +2890,7 @@
       "batch_data": "SparkDataFrame"
     },
     "batch_markers": {
-      "ge_load_time": "20260517T080400.342811Z"
+      "ge_load_time": "20260517T133923.170460Z"
     },
     "active_batch_definition": {
       "datasource_name": "noshow_spark_datasource",
