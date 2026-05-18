@@ -1,0 +1,4 @@
+processing:
+  categorical_imputation: most_frequent
+  numeric_imputation: median
+  categorical_encoding: ordinal

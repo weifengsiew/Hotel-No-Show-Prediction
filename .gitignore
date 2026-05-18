@@ -4,3 +4,7 @@ noshowenv/
 __pycache__/
 *.py[cod]
 .Rhistory
+mlflow.db
+mlruns/
+models/
+data/intermediate/noshow_MLready.csv

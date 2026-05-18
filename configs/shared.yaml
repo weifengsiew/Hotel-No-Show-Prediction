@@ -1,0 +1,13 @@
+data:
+  cleaned_path: data/intermediate/noshow_cleaned.csv
+  target_column: no_show
+  drop_columns:
+    - booking_id
+    - price
+
+training:
+  test_size: 0.2
+  random_state: 42
+  scoring: roc_auc
+  cv: 5
+  grid_search_n_jobs: 1

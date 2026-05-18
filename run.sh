@@ -10,4 +10,5 @@ fi
 
 PYTHON="$(which python)" # Python executable from active environment.
 
-PYTHONPATH=. "$PYTHON" scripts/run_etl.py # Run ETL script with project root available for imports.
+PYTHONPATH=. "$PYTHON" scripts/clean_data.py # Clean raw data.
+PYTHONPATH=. "$PYTHON" scripts/validate_cleaned_data.py # Validate cleaned data.
