@@ -94,6 +94,13 @@ See [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for the ful
 
 ## 5. To Reproduce
 
+### Clone Repository
+
+```bash
+git clone https://github.com/weifengsiew/Hotel-No-Show-Prediction.git
+cd Hotel-No-Show-Prediction
+```
+
 ### Environment Setup
 
 Use Python 3.12.
@@ -119,6 +126,8 @@ Run the full workflow:
 ```bash
 ./run.sh
 ```
+
+Open [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for the final report.
 
 Run stages individually:
 
