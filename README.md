@@ -174,7 +174,7 @@ Run stages individually:
 `-- run.sh                        # Full workflow 
 ```
 
-## 7. New ML Experiment Configuration
+## 7. To Configure a New ML Experiment
 
 To add a new candidate pipeline:
 
