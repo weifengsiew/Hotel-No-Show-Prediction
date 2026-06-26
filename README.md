@@ -66,7 +66,7 @@ This project is supported by the following Python frameworks:
 
 ### Final Pipeline
 
-Multiple candidate pipelines were compared during the ML experimentation stage. The best candidate pipeline was selected based on the highest mean cross-validated AUROC, then calibrated on the train set (80%) using isotonic regression.
+Multiple candidate pipelines were compared during the ML experiment stage. The best candidate pipeline was selected based on the highest mean cross-validated AUROC, then calibrated on the train set (80%) using isotonic regression.
 
 | Components of final pipeline | Details |
 | --- | --- |
@@ -137,7 +137,16 @@ Run stages individually:
 | `scripts/stage4.sh` | `train/test split -> ML experiment -> pipeline selection and calibration -> holdout evaluation and results` |
 | `scripts/all_stages.sh` | Runs stages 1-4 |
 
-## 6. Repository Structure
+## 6. To Configure a New ML Experiment
+
+To add a new candidate pipeline:
+
+1. Add a new preprocessor builder in [`preprocessor_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/preprocessor_registry.py).
+2. Add a new model in [`model_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/model_registry.py).
+3. Add model hyperparameter search grids in [`conf/base/parameters/model_hyperparams/`](conf/base/parameters/model_hyperparams/).
+4. Add the candidate name, preprocessor type, and model key in [`ml_experiment.yml`](conf/base/parameters/ml_experiment.yml).
+
+## 7. Repository Structure
 
 ```text
 .
@@ -173,14 +182,3 @@ Run stages individually:
 |-- requirements.txt
 `-- run.sh                        # Full workflow 
 ```
-
-## 7. To Configure a New ML Experiment
-
-To add a new candidate pipeline:
-
-1. Add a new preprocessor builder in [`preprocessor_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/preprocessor_registry.py).
-2. Add a new model in [`model_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/model_registry.py).
-3. Add model hyperparameter search grids in [`conf/base/parameters/model_hyperparams/`](conf/base/parameters/model_hyperparams/).
-4. Add the candidate name, preprocessor type, and model key in [`ml_experiment.yml`](conf/base/parameters/ml_experiment.yml).
-
-
