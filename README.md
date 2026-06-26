@@ -23,7 +23,7 @@ To achieve the project objective, a machine learning workflow consisting of the 
 Note: a scikit-learn pipeline is composed of a preprocessor, which feeds engineered and preprocessed features to a machine learning model with specific hyperparameters to make a prediction.
 
 <p align="center">
-  <a href="http://127.0.0.1:4141/?types=nodes&expandAllPipelines=false&pid=__default__">Visualise the workflow stages in detail</a>
+  <a href="https://weifengsiew.github.io/Hotel-No-Show-Prediction/?types=nodes&expandAllPipelines=false&pid=__default__">Visualise the workflow stages in detail</a>
 </p>
 
 ## 3. Python Frameworks
