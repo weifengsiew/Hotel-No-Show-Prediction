@@ -1,0 +1,18 @@
+model_hyperparams:
+  random_forest:
+    estimator:
+      type: RandomForestClassifier
+      params:
+        random_state: 42
+        class_weight: balanced
+        n_jobs: 1
+
+    search_grid:
+      # Ensemble size (default: 100): more trees reduce overfitting (variance) through averaging, with little effect on underfitting (bias).
+      model__n_estimators: [100, 200]
+      # Tree complexity (default: null): deeper trees reduce underfitting (bias) but increase overfitting (variance) by fitting finer partitions.
+      model__max_depth: [null, 16]
+      # Leaf complexity (default: 1): larger leaves smooth predictions, increasing underfitting (bias) but reducing overfitting (variance).
+      model__min_samples_leaf: [1, 5, 10, 20]
+      # Split diversity (default: sqrt): fewer features decorrelate trees, reducing overfitting (variance) but increasing underfitting (bias).
+      model__max_features: ["sqrt", "log2"]

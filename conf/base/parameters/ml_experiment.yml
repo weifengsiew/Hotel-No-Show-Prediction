@@ -1,0 +1,42 @@
+no_show_experiment:
+  experiment:
+    name: no_show
+    random_state: 42
+    output_dir: results/ml_experiments/final_no_show_model
+    model_filename: best_model.joblib
+
+  data:
+    path: data/processed/noshow_features.parquet
+    test_size: 0.2
+
+  target:
+    column: no_show
+
+  calibration:
+    method: isotonic
+    cv_folds: 5
+
+  mlflow:
+    tracking_uri: results/mlruns
+    experiment_name: no_show_experiments
+
+  search:
+    scoring: roc_auc
+    cv_folds: 5
+    n_jobs: 1
+
+  candidates:
+    - name: rf_preprocessor_v1
+      preprocessing:
+        type: preprocessor_v1
+      model: random_forest
+
+    - name: lightgbm_preprocessor_v1
+      preprocessing:
+        type: preprocessor_v1
+      model: lightgbm
+
+    - name: xgboost_preprocessor_v1
+      preprocessing:
+        type: preprocessor_v1
+      model: xgboost

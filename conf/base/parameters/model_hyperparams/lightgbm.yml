@@ -1,0 +1,19 @@
+model_hyperparams:
+  lightgbm:
+    estimator:
+      type: LGBMClassifier
+      params:
+        random_state: 42
+        class_weight: balanced
+        verbosity: -1
+        n_jobs: 1
+
+    search_grid:
+      # Boosting stages (default: 100): more trees increase additive complexity, reducing underfitting (bias) but increasing overfitting (variance).
+      model__n_estimators: [100, 300]
+      # Shrinkage (default: 0.1): smaller updates reduce overfitting (variance), but need enough trees to avoid underfitting (bias).
+      model__learning_rate: [0.05, 0.1]
+      # Leaf-wise complexity (default: 31): more leaves reduce underfitting (bias), but deep branches can increase overfitting (variance).
+      model__num_leaves: [15, 31, 63, 127]
+      # Leaf support (default: 20): larger leaves constrain complexity, reducing overfitting (variance) but increasing underfitting (bias).
+      model__min_child_samples: [20, 50]

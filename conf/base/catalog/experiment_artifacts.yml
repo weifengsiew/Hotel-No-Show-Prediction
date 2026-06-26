@@ -1,0 +1,7 @@
+test_set_metrics:
+  type: json.JSONDataset
+  filepath: results/ml_experiments/test_set_metrics.json
+
+persisted_pipeline_summary:
+  type: json.JSONDataset
+  filepath: results/ml_experiments/persisted_pipeline_summary.json

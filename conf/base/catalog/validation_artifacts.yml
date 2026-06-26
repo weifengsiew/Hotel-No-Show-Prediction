@@ -1,0 +1,15 @@
+raw_validation_results:
+  type: json.JSONDataset
+  filepath: results/validation/noshow_validation_results.json
+
+raw_validation_failures:
+  type: pandas.CSVDataset
+  filepath: results/validation/noshow_validation_failures.csv
+
+cleaned_validation_results:
+  type: json.JSONDataset
+  filepath: results/validation/noshow_cleaned_validation_results.json
+
+cleaned_validation_failures:
+  type: pandas.CSVDataset
+  filepath: results/validation/noshow_cleaned_validation_failures.csv

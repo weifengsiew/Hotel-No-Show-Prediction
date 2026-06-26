@@ -1,0 +1,7 @@
+noshow_cleaned:
+  type: pandas.ParquetDataset
+  filepath: data/intermediate/noshow_cleaned.parquet
+
+noshow_features:
+  type: pandas.ParquetDataset
+  filepath: data/processed/noshow_features.parquet

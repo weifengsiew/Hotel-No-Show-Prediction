@@ -1,10 +1,57 @@
+# macOS
 .DS_Store
-.venv/
-noshowenv/
+
+# Python caches and build outputs
 __pycache__/
 *.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+noshowenv/
+
+# Jupyter
+.jupyter/
+.ipynb_checkpoints/
+
+# Local configuration and secrets
+.env
+.env.*
+conf/local/*
+!conf/local/.gitkeep
+
+# Kedro and Kedro-Viz runtime artifacts
+.viz/
+.kedro/
+logs/
+
+# MLflow and model artifacts
 .Rhistory
 mlflow.db
 mlruns/
-models/
-data/intermediate/noshow_MLready.csv
+results/mlruns/
+/models/
+
+# Generated data artifacts
+data/raw/*
+!data/raw/.gitkeep
+data/intermediate/*
+!data/intermediate/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated validation and experiment outputs
+results/validation/*
+!results/validation/.gitkeep
+results/ml_experiments/*
+!results/ml_experiments/.gitkeep

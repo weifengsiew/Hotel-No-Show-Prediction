@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
-# Run script with bash.
 
-set -e # Stop script if any command fails.
+set -euo pipefail
 
-if [ -d "/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home" ]; then
-  export JAVA_HOME="/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
-  export PATH="$JAVA_HOME/bin:$PATH"
-fi
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-PYTHON="$(which python)" # Python executable from active environment.
-
-PYTHONPATH=. "$PYTHON" scripts/clean_data.py # Clean raw data.
-PYTHONPATH=. "$PYTHON" scripts/validate_cleaned_data.py # Validate cleaned data.
+"$PROJECT_ROOT/scripts/all_stages.sh"

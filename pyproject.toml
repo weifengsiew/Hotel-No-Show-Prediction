@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hotel-no-show-prediction"
+version = "0.1.0"
+description = "Kedro pipeline for hotel no-show prediction."
+requires-python = ">=3.12"
+
+[tool.kedro]
+package_name = "hotel_no_show_prediction"
+project_name = "Hotel No Show Prediction"
+kedro_init_version = "1.4.0"
+source_dir = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.kedro_telemetry]
+project_id = "786eb87d2d8f4d3c827f2b3869b5fac0"
