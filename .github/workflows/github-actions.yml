@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ".github/workflows/github-actions.yml"
+      - "conf/**"
+      - "scripts/**"
+      - "src/**"
+      - "pyproject.toml"
+      - "requirements.txt"
+      - "run.sh"
   workflow_dispatch:
 
 jobs:

@@ -9,6 +9,7 @@ from typing import Any
 
 import joblib
 import mlflow
+from mlflow.exceptions import MlflowException
 import pandas as pd
 import seaborn as sns
 from sklearn.calibration import CalibrationDisplay
@@ -24,9 +25,10 @@ EXPERIMENT_CONFIG_PATH = Path("conf") / "base" / "parameters" / "ml_experiment.y
 CV_RESULTS_ARTIFACT_PATH = "cv_results.json"
 FINISHED_RUN_FILTER = "attributes.status = 'FINISHED'"
 LATEST_RUN_ORDER_BY = ["start_time DESC"]
+MAX_FINISHED_RUNS_TO_CHECK = 50
 PLOT_COLOR = "#4C78A8"
 GUIDE_LINE_COLOR = "#333333"
-RECALL_GUIDE_VALUE = 0.60
+GUIDE_RATE_VALUE = 0.60
 MODEL_NAME_MARKERS = {
     "RandomForestClassifier": "RandomForest",
     "LGBMClassifier": "LightGBM",
@@ -90,8 +92,23 @@ def load_feature_data(project_root: Path, config: dict[str, Any]) -> pd.DataFram
     return pd.read_parquet(data_path)
 
 
+def get_local_cv_results_path(
+    project_root: Path,
+    config: dict[str, Any],
+    run: pd.Series,
+) -> Path:
+    """Return the local MLflow file-store path for a run's CV results."""
+    return (
+        resolve_project_path(project_root, config["mlflow"]["tracking_uri"])
+        / str(run["experiment_id"])
+        / str(run["run_id"])
+        / "artifacts"
+        / CV_RESULTS_ARTIFACT_PATH
+    )
+
+
 def load_latest_finished_run(project_root: Path, config: dict[str, Any]) -> pd.Series:
-    """Load the latest finished MLflow run for the configured experiment."""
+    """Load the latest finished MLflow run containing GridSearchCV results."""
     mlflow.set_tracking_uri(
         str(resolve_project_path(project_root, config["mlflow"]["tracking_uri"]))
     )
@@ -99,20 +116,42 @@ def load_latest_finished_run(project_root: Path, config: dict[str, Any]) -> pd.S
         experiment_names=[config["mlflow"]["experiment_name"]],
         filter_string=FINISHED_RUN_FILTER,
         order_by=LATEST_RUN_ORDER_BY,
-        max_results=1,
+        max_results=MAX_FINISHED_RUNS_TO_CHECK,
     )
     if runs.empty:
         raise RuntimeError("No finished MLflow run found. Run ./run.sh first.")
 
-    return runs.iloc[0]
+    for _, run in runs.iterrows():
+        if get_local_cv_results_path(project_root, config, run).exists():
+            return run
+        try:
+            mlflow.artifacts.download_artifacts(
+                run_id=run["run_id"],
+                artifact_path=CV_RESULTS_ARTIFACT_PATH,
+            )
+        except MlflowException:
+            continue
+        return run
 
-
-def load_cv_results(run_id: str) -> pd.DataFrame:
-    """Load GridSearchCV results from the latest MLflow run artifact."""
-    cv_results_path = mlflow.artifacts.download_artifacts(
-        run_id=run_id,
-        artifact_path=CV_RESULTS_ARTIFACT_PATH,
+    raise RuntimeError(
+        "No finished MLflow run with cv_results.json found. Run ./run.sh first."
     )
+
+
+def load_cv_results(
+    project_root: Path,
+    config: dict[str, Any],
+    run: pd.Series,
+) -> pd.DataFrame:
+    """Load GridSearchCV results from the selected MLflow run."""
+    cv_results_path = get_local_cv_results_path(project_root, config, run)
+    if not cv_results_path.exists():
+        cv_results_path = Path(
+            mlflow.artifacts.download_artifacts(
+                run_id=run["run_id"],
+                artifact_path=CV_RESULTS_ARTIFACT_PATH,
+            )
+        )
     return pd.read_json(cv_results_path, orient="split")
 
 
@@ -135,7 +174,7 @@ def load_report_context(project_root: Path) -> ReportContext:
     config = load_report_config(project_root)
     data = load_feature_data(project_root, config)
     latest_run = load_latest_finished_run(project_root, config)
-    cv_results = load_cv_results(latest_run["run_id"])
+    cv_results = load_cv_results(project_root, config, latest_run)
 
     _, X_test, _, y_test = split_train_test_data(data, config)
     y_score = predict_no_show_probabilities(project_root, config, X_test)
@@ -234,12 +273,13 @@ def summarise_candidate_pipelines(cv_results: pd.DataFrame) -> pd.io.formats.sty
         axis=1,
     )
     candidate_pipelines = candidate_pipelines[
-        ["rank_test_score", "candidate_pipeline"]
+        ["rank_test_score", "mean_test_score", "candidate_pipeline"]
     ].sort_values("rank_test_score")
 
     return (
         candidate_pipelines
-        .style.set_properties(
+        .style.format({"mean_test_score": "{:.3f}"})
+        .set_properties(
             subset=["candidate_pipeline"],
             **{
                 "text-align": "left",
@@ -249,7 +289,7 @@ def summarise_candidate_pipelines(cv_results: pd.DataFrame) -> pd.io.formats.sty
             },
         )
         .set_properties(
-            subset=["rank_test_score"],
+            subset=["rank_test_score", "mean_test_score"],
             **{"text-align": "center", "width": "110px"},
         )
         .set_table_styles(
@@ -344,12 +384,12 @@ def plot_roc_curve(y_test: pd.Series, y_score, ax) -> None:
     display = RocCurveDisplay.from_predictions(y_test, y_score, name="No-show", ax=ax)
     point_index = min(
         range(len(display.tpr)),
-        key=lambda index: abs(display.tpr[index] - RECALL_GUIDE_VALUE),
+        key=lambda index: abs(display.tpr[index] - GUIDE_RATE_VALUE),
     )
     guide_fpr = display.fpr[point_index]
-    guide_recall = display.tpr[point_index]
+    guide_true_positive_rate = display.tpr[point_index]
     ax.hlines(
-        guide_recall,
+        guide_true_positive_rate,
         xmin=0,
         xmax=guide_fpr,
         colors=GUIDE_LINE_COLOR,
@@ -359,21 +399,21 @@ def plot_roc_curve(y_test: pd.Series, y_score, ax) -> None:
     ax.vlines(
         guide_fpr,
         ymin=0,
-        ymax=guide_recall,
+        ymax=guide_true_positive_rate,
         colors=GUIDE_LINE_COLOR,
         linestyles="--",
         linewidth=1,
     )
     ax.annotate(
-        f"Recall / TPR = {guide_recall:.2f}\nFPR = {guide_fpr:.2f}",
-        xy=(guide_fpr, guide_recall),
+        f"True Positive Rate = {guide_true_positive_rate:.2f}\nFalse Positive Rate = {guide_fpr:.2f}",
+        xy=(guide_fpr, guide_true_positive_rate),
         xytext=(8, -28),
         textcoords="offset points",
         fontsize=9,
     )
     ax.set_title(f"ROC Curve (AUROC = {display.roc_auc:.2f})")
     ax.set_xlabel("False Positive Rate")
-    ax.set_ylabel("Recall / TPR")
+    ax.set_ylabel("True Positive Rate")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
 
@@ -389,7 +429,7 @@ def plot_precision_recall_curve(y_test: pd.Series, y_score, ax) -> None:
     )
     point_index = min(
         range(len(display.recall)),
-        key=lambda index: abs(display.recall[index] - RECALL_GUIDE_VALUE),
+        key=lambda index: abs(display.recall[index] - GUIDE_RATE_VALUE),
     )
     guide_recall = display.recall[point_index]
     guide_precision = display.precision[point_index]
@@ -410,14 +450,14 @@ def plot_precision_recall_curve(y_test: pd.Series, y_score, ax) -> None:
         linewidth=1,
     )
     ax.annotate(
-        f"Recall / TPR = {guide_recall:.2f}\nPrecision = {guide_precision:.2f}",
+        f"Recall = {guide_recall:.2f}\nPrecision = {guide_precision:.2f}",
         xy=(guide_recall, guide_precision),
         xytext=(-102, -30),
         textcoords="offset points",
         fontsize=9,
     )
     ax.set_title(f"Precision-Recall Curve (AUPRC = {auprc:.3f})")
-    ax.set_xlabel("Recall / TPR")
+    ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)

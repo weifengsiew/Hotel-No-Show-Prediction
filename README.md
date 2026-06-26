@@ -23,12 +23,14 @@ To achieve the project objective, a machine learning workflow consisting of the 
 Note: a scikit-learn pipeline is composed of a preprocessor, which feeds engineered and preprocessed features to a machine learning model with specific hyperparameters to make a prediction.
 
 <p align="center">
-  <a href="https://weifengsiew.github.io/Hotel-No-Show-Prediction/?types=nodes&expandAllPipelines=false&pid=__default__">Visualise the workflow stages in detail</a>
+  <a href="https://weifengsiew.github.io/Hotel-No-Show-Prediction/?types=nodes&expandAllPipelines=false&pid=__default__">
+    <strong>Visualise the workflow stages in detail</strong>
+  </a>
 </p>
 
 ## 3. Python Frameworks
 
-The workflow stages are supported by the following Python frameworks:
+This project is supported by the following Python frameworks:
 
 <p align="center">
   <img alt="Kedro" src="https://img.shields.io/badge/Kedro-Orchestration-243B53?style=for-the-badge">
@@ -73,7 +75,9 @@ Multiple candidate pipelines were compared during the ML experimentation stage. 
 | Hyperparameters | `learning_rate=0.05`, `min_child_samples=20`, `n_estimators=300`, `num_leaves=127`, `class_weight="balanced"` |
 | Calibration | Isotonic regression |
 
-### Evaluation Plots
+See [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for multiple candidate pipelines compared.
+
+### Final Results
 
 The calibrated pipeline was evaluated on the test set (20%).
 
@@ -85,8 +89,6 @@ The calibrated pipeline was evaluated on the test set (20%).
 <p align="center">
   <img src="notebooks/images/calibration_curve.png" alt="Calibration curve" width="450"/>
 </p>
-
-### Final Results
 
 See [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for the full results.
 
@@ -129,7 +131,7 @@ Run stages individually:
 
 | Script | Runs |
 | --- | --- |
-| `scripts/stage1.sh` | `noshow.db` |
+| `scripts/stage1.sh` | Download `noshow.db` |
 | `scripts/stage2.sh` | `data ingestion -> data cleaning and validation` |
 | `scripts/stage3.sh` | `feature engineering` |
 | `scripts/stage4.sh` | `train/test split -> ML experiment -> pipeline selection and calibration -> holdout evaluation and results` |
@@ -142,24 +144,24 @@ Run stages individually:
 |-- conf/
 |   `-- base/
 |       |-- catalog/              # Maps pipeline inputs/outputs to files
-|       `-- parameters/           # Controls validation, model search, and calibration
-|           |-- ml_experiment.yml
-|           `-- model_hyperparams/ # Search grids for Random Forest, LightGBM, and XGBoost
+|       `-- parameters/          
+|           |-- ml_experiment.yml  # Ml experiment configuration
+|           `-- model_hyperparams/ # Hyperparameter search grids for Random Forest, LightGBM, and XGBoost
 |-- data/
-|   |-- raw/                      # Downloaded noshow.db source data
-|   |-- intermediate/             # Cleaned data before feature engineering
-|   `-- processed/                # Feature-engineered table used for model training
+|   |-- raw/                      # Downloaded noshow.db dataset
+|   |-- intermediate/             # Cleaned dataset
+|   `-- processed/                # Feature-engineered dataset
 |-- notebooks/
-|   |-- final_results.ipynb       # Full results notebook
+|   |-- final_results.ipynb       # Presentation of results
 |   |-- final_results_helpers.py
 |   `-- images/
 |-- results/
-|   |-- ml_experiments/           # best_model.joblib, test metrics, and final pipeline summary
+|   |-- ml_experiments/           # best_model.joblib, test metrics, and persisted pipeline summary
 |   |-- mlruns/                   # MLflow run params, metrics, tags, and artifacts
-|   `-- validation/               # Raw and cleaned data validation results and failure tables
+|   `-- validation/               # Data validation results
 |-- scripts/
 |   |-- all_stages.sh
-|   |-- stage1.sh                 # noshow.db
+|   |-- stage1.sh                 # download noshow.db
 |   |-- stage2.sh                 # data ingestion -> data cleaning and validation
 |   |-- stage3.sh                 # feature engineering
 |   `-- stage4.sh                 # train/test split -> ML experiment -> pipeline selection and calibration -> holdout evaluation and results
@@ -169,20 +171,16 @@ Run stages individually:
 |       `-- sklearn_pipeline_components/ # Preprocessor/model registries and config loaders
 |-- pyproject.toml
 |-- requirements.txt
-`-- run.sh                        # Full workflow entry point
+`-- run.sh                        # Full workflow 
 ```
 
-## 7. Future Extensions
+## 7. New ML Experiment Configuration
 
 To add a new candidate pipeline:
 
-1. Add a preprocessor builder in [`preprocessor_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/preprocessor_registry.py).
-2. Register the estimator class in [`model_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/model_registry.py).
-3. Add model defaults and the search grid under [`conf/base/parameters/model_hyperparams/`](conf/base/parameters/model_hyperparams/).
+1. Add a new preprocessor builder in [`preprocessor_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/preprocessor_registry.py).
+2. Add a new model in [`model_registry.py`](src/hotel_no_show_prediction/sklearn_pipeline_components/model_registry.py).
+3. Add model hyperparameter search grids in [`conf/base/parameters/model_hyperparams/`](conf/base/parameters/model_hyperparams/).
 4. Add the candidate name, preprocessor type, and model key in [`ml_experiment.yml`](conf/base/parameters/ml_experiment.yml).
 
-Rerun modeling after changing candidates or search grids:
 
-```bash
-./scripts/stage4.sh
-```
