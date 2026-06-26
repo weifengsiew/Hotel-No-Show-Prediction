@@ -40,6 +40,7 @@ jobs:
         with:
           project_path: "."
           telemetry_consent: false
+          deployment_check: false
 
       - name: Run project workflow
         run: ./run.sh
