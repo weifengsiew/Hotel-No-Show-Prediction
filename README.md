@@ -4,6 +4,10 @@
   <img src="notebooks/images/final_results_header.png" alt="Hotel no-show prediction report visual" width="900"/>
 </p>
 
+<p align="center">
+  <sub>Header image source: <a href="https://www.prostay.com/blog/hotel-no-show/">Prostay, Hotel No Show: Prevention and Management Strategies</a>.</sub>
+</p>
+
 ## 1. Project Objective
 
 In this project, we leverage machine learning to accurately predict the probability that a hotel guest will show up for their booked stay ('0'), or if a no-show will occur ('1').
