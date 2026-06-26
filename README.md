@@ -4,10 +4,6 @@
   <img src="notebooks/images/final_results_header.png" alt="Hotel no-show prediction report visual" width="900"/>
 </p>
 
-<p align="center">
-  <strong>Hotel No Show Prediction</strong>
-</p>
-
 ## 1. Project Objective
 
 In this project, we leverage machine learning to accurately predict the probability that a hotel guest will show up for their booked stay ('0'), or if a no-show will occur ('1').
@@ -64,7 +60,7 @@ The workflow stages are supported by the following Python frameworks:
 
 ### Final Pipeline
 
-The best candidate pipeline was selected based on the highest mean cross-validated AUROC, then calibrated on the train set (80%) using isotonic regression.
+Multiple candidate pipelines were compared during the ML experimentation stage. The best candidate pipeline was selected based on the highest mean cross-validated AUROC, then calibrated on the train set (80%) using isotonic regression.
 
 | Components of final pipeline | Details |
 | --- | --- |
@@ -108,13 +104,6 @@ On macOS, install the OpenMP runtime required by LightGBM:
 
 ```bash
 brew install libomp
-```
-
-Check the environment:
-
-```bash
-python --version
-python -c "import kedro, pandas, pyarrow, sklearn, great_expectations, mlflow, lightgbm, xgboost; print('environment ok')"
 ```
 
 ### Run Workflow
