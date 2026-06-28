@@ -12,7 +12,7 @@
 
 In this project, we leverage machine learning to accurately predict the probability that a hotel guest will show up for their booked stay ('0'), or if a no-show will occur ('1').
 
-These probabilistic predictions are valuable as they can help inform hotel operations decisions, such as staffing, inventory management, reminder campaigns, deposit policies, and overbooking limits, so as to optimize business objectives such as profit.
+These probability estimates can support hotel operations and revenue-management decisions, including staffing, inventory planning, reminder campaigns, deposit policies, and overbooking limits. By identifying bookings with a higher risk of no-show, the hotel can make more informed decisions that support business objectives such as reducing operational inefficiencies, protecting revenue, and improving resource allocation.
 
 ## 2. Workflow Stages
 
