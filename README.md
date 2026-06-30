@@ -81,10 +81,18 @@ See [`notebooks/final_results.ipynb`](notebooks/final_results.ipynb) for multipl
 
 The calibrated pipeline was evaluated on the test set (20%).
 
+First, we plot the ROC curve to visualise the tradeoff between True Positive Rate and False Positive Rate across various classification thresholds. True Positive Rate measures the proportion of actual no-shows that were predicted as no-shows. A higher True Positive Rate means that more no-show instances will be identified in advance and receive intervention. False Positive Rate measures the proportion of actual shows that were incorrectly predicted as no-shows. A higher False Positive Rate means that more guests who would have shown up may receive unnecessary interventions.For example, at the classification threshold where 60% of all no-show instances are identified (True Positive Rate = 0.60), around 15% of show instances are incorrectly predicted as no-shows (False Positive Rate = 0.15). Overall, the pipeline achieves an AUROC of 0.81, indicating that no-show instances are assigned higher no-show probabilities than show instances around 81% of the time, allowing robust discrimination between the two.
+
 <p align="center">
   <img src="notebooks/images/roc_curve.png" alt="ROC curve" width="450"/>
+
+Moreover, we plot the precision-recall curve to visualise the tradeoff between Precision and Recall across various classification thresholds. Precision measures the proportion of predicted no-shows which are actually no-shows. Higher precision means that a larger proportion of interventions will be targeted at actual no-shows. For example, at the classification threshold where 60% of all no-shows are identified (Recall = 0.60), around 71% of the predicted no-shows are actually no-shows (Precision = 0.71).
+
+<p align="center">
   <img src="notebooks/images/precision_recall_curve.png" alt="Precision-recall curve" width="450"/>
 </p>
+
+Lastly, we plot the calibration curve to assess whether the predicted no-show probabilities align with the actual observed no-show rates. This is important because well-calibrated probabilities enable reliable estimation of operational quantities such as expected no-shows, expected show-ups, under-occupancy risk, over-occupancy risk, and the potential value of targeted interventions such as reminders. These estimates can then inform hotel operations decisions, including staffing, inventory management, reminder campaigns, deposit policies, and overbooking limits, so as to optimize business objectives such as profit.
 
 <p align="center">
   <img src="notebooks/images/calibration_curve.png" alt="Calibration curve" width="450"/>
